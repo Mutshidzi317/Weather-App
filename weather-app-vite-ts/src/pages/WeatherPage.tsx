@@ -5,7 +5,7 @@ import { getWeatherByCity, getWeatherByCoords } from '../services/weatherService
 
 const WeatherPage = () => {
   const [weatherData, setWeatherData] = useState<any>(null);
-  const [location, setLocation] = useState<string>('`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=no`');
+  const [location, setLocation] = useState<string>('Current Location');
 
   const fetchWeather = async (city?: string) => {
     try {
@@ -14,7 +14,12 @@ const WeatherPage = () => {
         : await getUserLocationWeather();
       setWeatherData(data);
     } catch (error) {
-      alert('Could not fetch weather data.');
+
+        const data = city
+        ? await getWeatherByCity(city)
+        : await getUserLocationWeather();
+      setWeatherData(data);
+      //alert('Could not fetch weather data.');
     }
   };
 
