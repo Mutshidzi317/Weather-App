@@ -1,36 +1,32 @@
-import { useState } from 'react';
+import React, { useState } from "react";
+import { Text } from "./Text";
+import { Button } from "./Button";
+import styles from "../styles/SearchBar.module.css";
 
-interface Props {
-  onSearch: (city: string) => void;
-}
+type Props = {
+  onSearch: (query: string) => void;
+};
 
-const SearchBar = ({ onSearch }: Props) => {
-  const [input, setInput] = useState('');
+export const SearchBar: React.FC<Props> = ({ onSearch }) => {
+  const [query, setQuery] = useState("");
 
-  const handleSearch = () => {
-    if (input.trim()) {
-      onSearch(input.trim());
-      setInput('');
-    }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (query.trim() !== "") onSearch(query.trim());
+    setQuery("");
   };
 
   return (
-    <div className="flex mb-4 gap-2">
+    <form className={styles.form} onSubmit={handleSubmit}>
+      <Text variant="p" className={styles.label}>Search City:</Text>
       <input
-        className="w-full p-2 border rounded"
         type="text"
-        placeholder="Enter city"
-        value={input}
-        onChange={e => setInput(e.target.value)}
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        className={styles.input}
+        placeholder="Enter city name..."
       />
-      <button
-        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
-        onClick={handleSearch}
-      >
-        Search
-      </button>
-    </div>
+      <Button type="submit">Search</Button>
+    </form>
   );
 };
-
-export default SearchBar;
